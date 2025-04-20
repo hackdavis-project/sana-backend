@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Request, Depends, HTTPException
+from fastapi import APIRouter, status, Request, Depends, HTTPException, Body
 from fastapi.responses import RedirectResponse, JSONResponse
 from starlette.config import Config
 from starlette.requests import Request
@@ -8,6 +8,7 @@ import os
 from modules import database
 from datetime import datetime, timedelta
 from utils.auth import get_current_user
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -135,4 +136,18 @@ async def get_me(user=Depends(get_current_user)):
         "email": user["email"],
         "name": user["name"],
         "voice_id": await database.get_voice_id(user["user_id"]),
+        "onboarded": user.get("onboarded", False),
     }
+
+
+class OnboardedUpdate(BaseModel):
+    onboarded: bool
+
+
+@router.patch("/auth/onboarded")
+async def update_onboarded(onboarded_data: OnboardedUpdate, user=Depends(get_current_user)):
+    """
+    Update the onboarded status for the current user.
+    """
+    await database.update_onboarded_status(user["user_id"], onboarded_data.onboarded)
+    return {"success": True, "message": "Onboarded status updated successfully"}

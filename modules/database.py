@@ -21,6 +21,7 @@ async def create_mock_user() -> str:
         "name": "John Smith",
         "preferences": {},
         "voice_id": None,
+        "onboarded": False,
         "created_at": time.time(),
         "updated_at": time.time(),
     }
@@ -45,6 +46,7 @@ async def create_user_with_google(google_id: str, email: str, name: str) -> str:
         "name": name,
         "preferences": {},
         "voice_id": None,
+        "onboarded": False,
         "created_at": time.time(),
         "updated_at": time.time(),
     }
@@ -135,3 +137,9 @@ async def save_voice_id(user_id: str, voice_id: str) -> None:
 async def get_voice_id(user_id: str) -> str | None:
     user = await database["Users"].find_one({"user_id": user_id})
     return user.get("voice_id")
+
+
+async def update_onboarded_status(user_id: str, onboarded: bool) -> None:
+    await database["Users"].update_one(
+        {"user_id": user_id}, {"$set": {"onboarded": onboarded}}
+    )
