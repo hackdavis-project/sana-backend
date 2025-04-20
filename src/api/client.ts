@@ -80,7 +80,7 @@ class ApiClient {
   private client: AxiosInstance;
   private token: string | null = null;
 
-  constructor(baseURL = 'http://localhost:8000/api') {
+  constructor(baseURL = 'http://localhost:3000/api') {
     this.client = axios.create({
       baseURL,
       headers: {
