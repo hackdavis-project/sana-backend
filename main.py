@@ -15,12 +15,17 @@ import uvicorn
 
 load_dotenv()
 
+
 def main():
     app = FastAPI()
 
+    # Get frontend URL from environment or use default
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
+    # Configure CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=[frontend_url],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -28,9 +33,9 @@ def main():
     app.add_middleware(
         SessionMiddleware,
         secret_key=os.getenv("SESSION_SECRET_KEY", "super-secret-key"),
-        same_site="lax"
+        same_site="lax",
     )
-    
+
     app.include_router(auth_router, prefix="/api")
     app.include_router(communities_router, prefix="/api")
     app.include_router(journal_router, prefix="/api")
