@@ -7,6 +7,7 @@ from routes.communities import router as communities_router
 from routes.journal import router as journal_router
 from routes.resources import router as resources_router
 from routes.tts import router as tts_router
+from routes.comments import router as comments_router
 
 from dotenv import load_dotenv
 
@@ -35,6 +36,7 @@ def main():
     app.include_router(journal_router, prefix="/api")
     app.include_router(resources_router, prefix="/api")
     app.include_router(tts_router, prefix="/api")
+    app.include_router(comments_router, prefix="/api")
 
     @app.get("/")
     async def root():
