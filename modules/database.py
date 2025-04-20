@@ -11,11 +11,15 @@ client = AsyncIOMotorClient(os.getenv('MONGODB_URI'))
 
 database = client[os.getenv('DATABASE_NAME')]
 
-async def create_user() -> str:
+async def create_mock_user() -> str:
     user_id = str(uuid4())
     document = {
         "user_id": user_id,
+        "google_id": user_id,
+        "email": "johnsmith" + user_id + "@gmail.com",
+        "name": "John Smith",
         "preferences": {},
+        "voice_id": None,
         "created_at": time.time(),
         "updated_at": time.time()
     }
@@ -25,6 +29,9 @@ async def create_user() -> str:
 async def get_user_by_google_id(google_id: str) -> dict | None:
     return await database["Users"].find_one({"google_id": google_id})
 
+async def get_user_by_id(user_id: str) -> dict | None:
+    return await database["Users"].find_one({"user_id": user_id})
+
 async def create_user_with_google(google_id: str, email: str, name: str) -> str:
     user_id = str(uuid4())
     document = {
@@ -33,6 +40,7 @@ async def create_user_with_google(google_id: str, email: str, name: str) -> str:
         "email": email,
         "name": name,
         "preferences": {},
+        "voice_id": None,
         "created_at": time.time(),
         "updated_at": time.time()
     }
@@ -80,9 +88,13 @@ async def delete_journal_entry(entry_id: str) -> None:
     
 async def add_resource(resource: dict) -> None:
     await database["Resources"].insert_one(resource)
+
 async def get_resources() -> list[dict]:
     return await database["Resources"].find().to_list()
     
-    
+async def save_voice_id(user_id: str, voice_id: str) -> None:
+    await database["Users"].update_one({"user_id": user_id}, {"$set": {"voice_id": voice_id}})
 
-    
+async def get_voice_id(user_id: str) -> str | None:
+    user = await database["Users"].find_one({"user_id": user_id})
+    return user.get("voice_id")
