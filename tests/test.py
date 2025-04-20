@@ -1,0 +1,1 @@
+GET http://localhost:8000/api/generate HTTP/1.1
