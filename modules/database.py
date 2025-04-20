@@ -22,11 +22,18 @@ async def create_mock_user() -> str:
         "preferences": {},
         "voice_id": None,
         "onboarded": False,
+        "voiceSetup": False,
         "created_at": time.time(),
         "updated_at": time.time(),
     }
     await database["Users"].insert_one(document)
     return user_id
+
+
+async def update_voice_setup(user_id: str, voiceSetup: bool) -> None:
+    await database["Users"].update_one(
+        {"user_id": user_id}, {"$set": {"voiceSetup": voiceSetup}}
+    )
 
 
 async def get_user_by_google_id(google_id: str) -> dict | None:
@@ -47,6 +54,7 @@ async def create_user_with_google(google_id: str, email: str, name: str) -> str:
         "preferences": {},
         "voice_id": None,
         "onboarded": False,
+        "voiceSetup": False,
         "created_at": time.time(),
         "updated_at": time.time(),
     }

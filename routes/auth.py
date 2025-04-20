@@ -22,10 +22,11 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # Print OAuth configuration values for debugging
 print(f"GOOGLE_CLIENT_ID: {GOOGLE_CLIENT_ID}")
-print(f"GOOGLE_CLIENT_SECRET: {GOOGLE_CLIENT_SECRET[:4]}...")  # Only show first few chars for security
+print(
+    f"GOOGLE_CLIENT_SECRET: {GOOGLE_CLIENT_SECRET[:4]}..."
+)  # Only show first few chars for security
 print(f"JWT_SECRET: {JWT_SECRET[:4]}...")  # Only show first few chars for security
 print(f"FRONTEND_URL: {FRONTEND_URL}")
-
 
 
 oauth = OAuth(config)
@@ -132,6 +133,11 @@ async def google_auth_callback(request: Request):
 
     return response
 
+@router.post("/auth/voice_setup")
+async def voice_setup(user=Depends(get_current_user)):
+    await database.update_voice_setup(user["user_id"], True)
+    return {"success": True, "message": "Voice setup completed successfully"}
+
 
 @router.get("/auth/me")
 async def get_me(user=Depends(get_current_user)):
@@ -139,14 +145,15 @@ async def get_me(user=Depends(get_current_user)):
     Example route that demonstrates using the Depends(get_current_user) pattern.
     Returns the current user's information.
     """
-    #get user from database
-    u = await database.get_user_by_id(user["user_id"])   
+    # get user from database
+    u = await database.get_user_by_id(user["user_id"])
     return {
         "user_id": u["user_id"],
         "email": u["email"],
         "name": u["name"],
         "voice_id": await database.get_voice_id(u["user_id"]),
         "onboarded": u.get("onboarded", False),
+        "voiceSetup": u.get("voiceSetup", False),
     }
 
 
@@ -155,7 +162,9 @@ class OnboardedUpdate(BaseModel):
 
 
 @router.patch("/auth/onboarded")
-async def update_onboarded(onboarded_data: OnboardedUpdate, user=Depends(get_current_user)):
+async def update_onboarded(
+    onboarded_data: OnboardedUpdate, user=Depends(get_current_user)
+):
     """
     Update the onboarded status for the current user.
     """
