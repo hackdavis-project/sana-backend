@@ -19,15 +19,8 @@ logger = logging.getLogger(__name__)
 
 
 # Define Pydantic models for structured output
-class TranscriptionSegment(BaseModel):
-    text: str
-    start_time: float
-    end_time: float
-
-
 class Transcription(BaseModel):
     full_text: str
-    segments: List[TranscriptionSegment]
     language: str
 
 
@@ -43,12 +36,11 @@ class TranscriptionResponse(BaseModel):
 )
 async def transcribe_audio(
     file: UploadFile = File(...),
-    include_timestamps: bool = True,
     user=Depends(get_current_user),
 ):
     """
     Convert speech audio to text using Gemini.
-    Accepts an audio file, processes it with Gemini, and returns transcription with timestamps.
+    Accepts an audio file, processes it with Gemini, and returns transcription.
     """
     logger.info(f"Processing speech-to-text request for user_id={user['user_id']}")
 
@@ -85,24 +77,11 @@ async def transcribe_audio(
         Instructions:
         - Transcribe the speech as accurately as possible
         - Preserve the meaning and content of what is spoken
-        - {"Include timestamps for each segment" if include_timestamps else "Timestamps are not required"}
         - Detect the language of the audio
         
         Format your response exactly as this JSON structure:
         {{
           "full_text": "The complete transcribed text from the audio",
-          "segments": [
-            {{
-              "text": "First segment of text",
-              "start_time": 0.0,
-              "end_time": 2.5
-            }},
-            {{
-              "text": "Second segment of text",
-              "start_time": 2.6,
-              "end_time": 5.0
-            }}
-          ],
           "language": "en"
         }}
         
@@ -132,14 +111,6 @@ async def transcribe_audio(
 
                 # Parse the response
                 result = json.loads(response.text)
-
-                # If not using timestamps, add default values
-                if not include_timestamps:
-                    for segment in result["segments"]:
-                        if "start_time" not in segment:
-                            segment["start_time"] = 0.0
-                        if "end_time" not in segment:
-                            segment["end_time"] = 0.0
 
                 # Create response with the structured Transcription model
                 transcription = Transcription(**result)

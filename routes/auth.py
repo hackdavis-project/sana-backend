@@ -134,4 +134,5 @@ async def get_me(user=Depends(get_current_user)):
         "user_id": user["user_id"],
         "email": user["email"],
         "name": user["name"],
+        "voice_id": await database.get_voice_id(user["user_id"]),
     }
