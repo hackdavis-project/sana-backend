@@ -1,21 +1,21 @@
 # Web Framework
-fastapi>=0.104.0
-uvicorn>=0.23.2
-starlette>=0.27.0
-pydantic>=2.4.2
+fastapi
+uvicorn
+starlette
+pydantic
 
 # Authentication
-authlib>=1.2.1
-python-jose>=3.3.0
-python-dotenv>=1.0.0
+authlib
+python-jose
+python-dotenv
 
 # Database
-motor>=3.3.1
-pymongo>=4.5.0
+motor
+pymongo
 
 # Text-to-Speech
-elevenlabs>=0.2.26
+elevenlabs
 
 # Middleware and Utils
-python-multipart>=0.0.6
-httpx>=0.25.0
+python-multipart
+httpx
