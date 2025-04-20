@@ -3,8 +3,10 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from starlette.config import Config
 from starlette.requests import Request
 from authlib.integrations.starlette_client import OAuth
+from jose import jwt
 import os
 from modules import database
+from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -12,6 +14,8 @@ router = APIRouter()
 config = Config('.env')
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+JWT_SECRET = os.getenv('JWT_SECRET', 'jwt-secret-key')
+JWT_ALGORITHM = 'HS256'
 
 oauth = OAuth(config)
 oauth.register(
@@ -56,7 +60,15 @@ async def google_auth_callback(request: Request):
     else:
         user_id = user['user_id']
 
+    payload = {
+        'user_id': user_id,
+        'email': email,
+        'exp': datetime.utcnow() + timedelta(days=7)  # token valid for 7 days
+    }
+    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return JSONResponse({
+        'access_token': token,
+        'token_type': 'bearer',
         'user_id': user_id,
         'email': email,
         'name': name
