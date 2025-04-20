@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status
 from pydantic import BaseModel
+from modules.gemini import find_resources
 
 router = APIRouter()
 
@@ -9,7 +10,6 @@ class ResourcesResponse(BaseModel):
 class ResourceRequest(BaseModel):
     journal_entry: str
 
-from modules.gemini import find_resources
 
 @router.post("/resources/get", response_model=ResourcesResponse, status_code=status.HTTP_200_OK)
 async def get_resources(request: ResourceRequest):

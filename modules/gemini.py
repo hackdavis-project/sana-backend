@@ -32,7 +32,8 @@ classification_config = types.GenerateContentConfig(
 )
 
 resources_config = types.GenerateContentConfig(
-    response_mime_type='text/plain',
+    response_schema=Resources,
+    response_mime_type='application/json',
     temperature=0.2
 )
 
