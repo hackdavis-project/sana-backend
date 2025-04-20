@@ -97,12 +97,16 @@ You are an AI assistant embedded in a supportive journaling app. Your task is to
 **Journal Entry:**
 {journal_entry}
     """
+
+    print(base_prompt)
     
     response = await client.aio.models.generate_content(
         model='gemini-2.0-flash',
         contents=[base_prompt],
         config=resources_config
     )
+
+    print(response.text)
 
     resources = Resources(**json.loads(response.text))
     return resources
