@@ -71,6 +71,10 @@ async def get_journal_entry(entry_id: str) -> dict | None:
 async def get_all_journal_entries(user_id: str) -> list[dict]:
     return await database["Journals"].find({"user_id": user_id}).to_list(1000)
 
+async def get_shared_journal_entries_by_category(category: str) -> list[dict]:
+    # Only return entries that are shared and match the classification/category
+    return await database["Journals"].find({"shared": True, "classification": category}).to_list(1000)
+
 async def delete_journal_entry(entry_id: str) -> None:
     await database["Journals"].delete_one({"entry_id": entry_id})
     
