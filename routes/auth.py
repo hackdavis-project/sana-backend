@@ -63,6 +63,7 @@ async def google_auth_callback(request: Request):
     payload = {
         'user_id': user_id,
         'email': email,
+        'name': name,
         'exp': datetime.utcnow() + timedelta(days=7)  # token valid for 7 days
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
