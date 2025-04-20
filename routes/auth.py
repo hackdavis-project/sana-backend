@@ -131,12 +131,14 @@ async def get_me(user=Depends(get_current_user)):
     Example route that demonstrates using the Depends(get_current_user) pattern.
     Returns the current user's information.
     """
+    #get user from database
+    u = await database.get_user_by_id(user["user_id"])   
     return {
-        "user_id": user["user_id"],
-        "email": user["email"],
-        "name": user["name"],
-        "voice_id": await database.get_voice_id(user["user_id"]),
-        "onboarded": user.get("onboarded", False),
+        "user_id": u["user_id"],
+        "email": u["email"],
+        "name": u["name"],
+        "voice_id": await database.get_voice_id(u["user_id"]),
+        "onboarded": u.get("onboarded", False),
     }
 
 
