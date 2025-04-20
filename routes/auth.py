@@ -20,6 +20,14 @@ JWT_SECRET = os.getenv("JWT_SECRET", "jwt-secret-key")
 JWT_ALGORITHM = "HS256"
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
+# Print OAuth configuration values for debugging
+print(f"GOOGLE_CLIENT_ID: {GOOGLE_CLIENT_ID}")
+print(f"GOOGLE_CLIENT_SECRET: {GOOGLE_CLIENT_SECRET[:4]}...")  # Only show first few chars for security
+print(f"JWT_SECRET: {JWT_SECRET[:4]}...")  # Only show first few chars for security
+print(f"FRONTEND_URL: {FRONTEND_URL}")
+
+
+
 oauth = OAuth(config)
 oauth.register(
     name="google",

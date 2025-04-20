@@ -32,6 +32,11 @@ def main():
             "https://sana.miromiro.dev/",
             "http://sana.miromiro.dev",
             "http://sana.miromiro.dev/",
+            # sana-api.miromiro.dev variations (API domain)
+            "https://sana-api.miromiro.dev",
+            "https://sana-api.miromiro.dev/",
+            "http://sana-api.miromiro.dev",
+            "http://sana-api.miromiro.dev/",
             # miromiro.dev variations
             "https://miromiro.dev",
             "https://miromiro.dev/",
@@ -47,8 +52,6 @@ def main():
             "http://localhost:3000/",
             "https://localhost:3000",
             "https://localhost:3000/",
-            # Allow all origins during development (optional, remove in production)
-            "*"
         ],
         allow_credentials=True,
         allow_methods=["*"],
