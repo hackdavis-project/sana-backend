@@ -20,4 +20,4 @@ elevenlabs
 python-multipart
 httpx
 itsdangerous
-google
+google-genai
