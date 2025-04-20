@@ -19,3 +19,4 @@ elevenlabs
 # Middleware and Utils
 python-multipart
 httpx
+itsdangerous
