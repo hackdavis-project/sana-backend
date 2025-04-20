@@ -26,7 +26,11 @@ def main():
     # Configure CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[frontend_url],
+        allow_origins=[
+            "https://sana.miromiro.dev/",
+            "http://localhost:3000",
+            "https://mirmiro.dev"
+        ],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
