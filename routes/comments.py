@@ -36,7 +36,6 @@ async def get_comments_endpoint(entry_id: str, user=Depends(get_current_user)):
     logger.info(f"Retrieving comments for entry_id={entry_id}")
     try:
         comments = await get_comments(entry_id)
-        # Remove user_id from comments for anonymity
         for comment in comments:
             comment.pop('user_id', None)
         logger.info(f"Returning {len(comments)} comments for entry_id={entry_id}")

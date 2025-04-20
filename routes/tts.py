@@ -23,6 +23,7 @@ async def tts(text: str, user=Depends(get_current_user)):
         logger.info(f"No custom voice for user_id={user['user_id']}, using default voice_id={voice_id}")
     else:
         logger.info(f"Using custom voice_id={voice_id} for user_id={user['user_id']}")
+        
     try:
         response = client.text_to_speech.convert(
             voice_id=voice_id,
@@ -68,6 +69,7 @@ async def clone_voice(file: UploadFile = File(...), user=Depends(get_current_use
         result = await client.voices.add(
             name=f"user_{user['user_id']}_voice",
             files=[audio_file],
+            remove_background_noise=True
         )
         voice_id = result.voice_id if hasattr(result, 'voice_id') else result['voice_id']
         logger.info(f"Cloned voice for user_id={user['user_id']}, received voice_id={voice_id}")
