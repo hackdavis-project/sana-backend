@@ -72,7 +72,7 @@ You are an AI assistant analyzing anonymous journal entries for a mental health 
 
     response = await client.aio.models.generate_content(
         model='gemini-2.0-flash',
-        contents=[base_prompt, journal_entry],
+        contents=[base_prompt],
         config=classification_config
     )
 
@@ -93,11 +93,14 @@ You are an AI assistant embedded in a supportive journaling app. Your task is to
 **Available Resources:**
 
 {await database.get_resources()}
-    """
 
+**Journal Entry:**
+{journal_entry}
+    """
+    
     response = await client.aio.models.generate_content(
         model='gemini-2.0-flash',
-        contents=[base_prompt, journal_entry],
+        contents=[base_prompt],
         config=resources_config
     )
 
