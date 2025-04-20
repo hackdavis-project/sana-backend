@@ -27,9 +27,28 @@ def main():
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
+            # sana.miromiro.dev variations
+            "https://sana.miromiro.dev",
             "https://sana.miromiro.dev/",
+            "http://sana.miromiro.dev",
+            "http://sana.miromiro.dev/",
+            # miromiro.dev variations
+            "https://miromiro.dev",
+            "https://miromiro.dev/",
+            "http://miromiro.dev",
+            "http://miromiro.dev/",
+            # mirmiro.dev variations (as in your original config)
+            "https://mirmiro.dev",
+            "https://mirmiro.dev/",
+            "http://mirmiro.dev",
+            "http://mirmiro.dev/",
+            # localhost variations
             "http://localhost:3000",
-            "https://mirmiro.dev"
+            "http://localhost:3000/",
+            "https://localhost:3000",
+            "https://localhost:3000/",
+            # Allow all origins during development (optional, remove in production)
+            "*"
         ],
         allow_credentials=True,
         allow_methods=["*"],
