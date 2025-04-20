@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status, Depends
 from modules import database
+from utils.auth import get_current_user
 
 router = APIRouter()
 
