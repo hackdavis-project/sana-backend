@@ -69,7 +69,7 @@ async def clone_voice(file: UploadFile = File(...), user=Depends(get_current_use
         result = await client.voices.add(
             name=f"user_{user['user_id']}_voice",
             files=[audio_file],
-            remove_background_noise=True
+            remove_background_noise=False
         )
         voice_id = result.voice_id if hasattr(result, 'voice_id') else result['voice_id']
         logger.info(f"Cloned voice for user_id={user['user_id']}, received voice_id={voice_id}")
